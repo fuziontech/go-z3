@@ -71,7 +71,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/mitchellh/go-z3"
+	"github.com/fuziontech/go-z3"
 )
 
 func main() {
@@ -120,7 +120,7 @@ func main() {
 	// x + y = -3
 	s.Assert(x.Add(y).Eq(ctx.Int(-3, ctx.IntSort())))
 
-	if v := s.Check(); v != True {
+	if v := s.Check(); v != z3.LBool(z3.True) {
 		fmt.Println("Unsolveable")
 		return
 	}
