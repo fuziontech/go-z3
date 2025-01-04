@@ -3,6 +3,7 @@ package z3
 // #include <stdlib.h>
 // #include "go-z3.h"
 import "C"
+import "unsafe"
 
 // AST represents an AST value in Z3.
 //
@@ -70,6 +71,18 @@ func (c *Context) False() *AST {
 	return &AST{
 		rawCtx: c.raw,
 		rawAST: C.Z3_mk_false(c.raw),
+	}
+}
+
+// FreshInt creates a fresh integer constant (or variable) with a unique name based on the prefix.
+//
+// Maps: Z3_mk_fresh_const
+func (c *Context) FreshInt(prefix string) *AST {
+	cstr := C.CString(prefix)
+	defer C.free(unsafe.Pointer(cstr))
+	return &AST{
+		rawCtx: c.raw,
+		rawAST: C.Z3_mk_fresh_const(c.raw, cstr, c.IntSort().rawSort),
 	}
 }
 
